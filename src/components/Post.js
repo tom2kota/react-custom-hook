@@ -1,7 +1,22 @@
+import {useEffect, useState} from "react";
 import {Card} from "./Card";
 
 export const Post = ({postId}) => {
-    const post = null
+    const [post, setPost] = useState(null)
+
+    useEffect(
+        () => {
+            console.log('Post useEffect')
+
+            const fetchPosts = async () => {
+                const response = await fetch(`https://json-server-posts.herokuapp.com/posts?id=${postId}`)
+                const posts = await response.json()
+                setPost(posts[0])
+            }
+
+            fetchPosts()
+        }, [postId]
+    )
 
     return (
         <Card>
