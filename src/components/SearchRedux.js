@@ -1,10 +1,35 @@
-import {useEffect, useState} from "react";
+import {useEffect, useReducer} from "react";
 import {Card} from "./Card";
 
-export const SearchRedux = () => {
+const INITIAL_STATE = {
+    user: null,
+    searchQuery: ''
+}
 
-    const [user, setUser] = useState(null)
-    const [searchQuery, setSearchQuery] = useState('Bret')
+const reducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_USER':
+            return {...state, user: action.payload}
+        case 'SET_SEARCH_QUERY':
+            return {...state, searchQuery: action.payload}
+        default:
+            return state
+    }
+}
+
+const setUser = user => ({
+    type: 'SET_USER',
+    payload: user
+})
+
+const setSearchQuery = searchQuery => ({
+    type: 'SET_SEARCH_QUERY',
+    payload: searchQuery
+})
+
+export const SearchRedux = () => {
+    const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
+    const {user, searchQuery} = state
 
     useEffect(() => {
         console.log('useEffect ... SearchRedux component', searchQuery)
@@ -13,7 +38,7 @@ export const SearchRedux = () => {
             const fetchFunc = async () => {
                 const response = await fetch(`https://json-server-posts.herokuapp.com/users?username=${searchQuery}`)
                 const responseJson = await response.json()
-                setUser(responseJson[0])
+                dispatch(setUser(responseJson[0]))
             }
             fetchFunc()
         }
@@ -27,9 +52,8 @@ export const SearchRedux = () => {
                 value={searchQuery}
                 placeholder='Name'
                 onChange={
-                    event => setSearchQuery(event.target.value.replace(/(^\w{1})|(\s+\w{1})/g,
-                        firstLetter => firstLetter.toUpperCase()))
-                }
+                    event => dispatch(setSearchQuery(event.target.value.replace(/(^\w{1})|(\s+\w{1})/g,
+                        firstLetter => firstLetter.toUpperCase())))}
             />
             {
                 user ? (
