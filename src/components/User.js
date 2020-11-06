@@ -1,21 +1,9 @@
-import {useEffect, useState} from "react";
 import {Card} from "./Card";
+import {useFetch} from "../effects/useFetch";
 
 export const User = ({userId}) => {
-    const [user, setUser] = useState(null)
-
-    useEffect(() => {
-        console.log('User useEffect')
-
-        const fetchUser = async ()=> {
-            const response = await fetch(`https://json-server-posts.herokuapp.com/users?id=${userId}`)
-            const users = await response.json()
-            setUser(users[0])
-        }
-
-        fetchUser()
-
-    }, [userId])
+    const url = `https://json-server-posts.herokuapp.com/users`
+    const user = useFetch(`${url}?id=${userId}`)
 
     return (
         <Card>
