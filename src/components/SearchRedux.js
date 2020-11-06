@@ -1,13 +1,13 @@
 import {useEffect, useState} from "react";
 import {Card} from "./Card";
 
-export const Search = () => {
+export const SearchRedux = () => {
 
     const [user, setUser] = useState(null)
     const [searchQuery, setSearchQuery] = useState('Bret')
 
     useEffect(() => {
-        console.log('useEffect ... Search component', searchQuery)
+        console.log('useEffect ... SearchRedux component', searchQuery)
 
         if (searchQuery.length) {
             const fetchFunc = async () => {
