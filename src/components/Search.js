@@ -26,7 +26,10 @@ export const Search = () => {
                 type='search'
                 value={searchQuery}
                 placeholder='Name'
-                onChange={event => setSearchQuery(event.target.value)}
+                onChange={
+                    event => setSearchQuery(event.target.value.replace(/(^\w{1})|(\s+\w{1})/g,
+                        firstLetter => firstLetter.toUpperCase()))
+                }
             />
             {
                 user ? (
